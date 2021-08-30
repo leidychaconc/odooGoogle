@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: odoo-deployment
+spec:
+  selector:
+    matchLabels:
+      app: odoo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: odoo
+    spec:
+      containers:
+        - name: odoo-server
+          image: odoo
+          ports:
+          - name: oddo-http-port
+            containerPort: 8069
+          env:
+            #- name: HOST
+            #  value: 127.0.0.1
+            - name: "HOST"
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-secrets
+                  key: postgres_host
+            - name: "PORT"
+              value: "5432"
+            - name: "USER"
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-secrets
+                  key: postgres_user
+            - name: "PASSWORD"
+              valueFrom:
+                secretKeyRef:
+                  name: odoo-secrets
+                  key: postgres_password     
+        #- name: odoo-db
+        #  image: postgres:10
+        #  ports:
+        #  - name: oddo-db-port
+        #    containerPort: 5432
+        #  env:
+        #    - name: POSTGRES_PASSWORD
+        #      value: odoo
+        #    - name: POSTGRES_USER
+        #      value: odoo
+        #    - name: POSTGRES_DB
+        #      value: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceodoo
+spec:
+  selector:
+    app: odoo
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8069
+  type: LoadBalancer
+          
+
+  
+
+  
+
+  

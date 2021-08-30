@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+         stage('Set Auth service account') {
+            steps {
+                sh '/var/lib/jenkins/google-cloud-sdk/bin/gcloud auth activate-service-account 402461435375-compute@developer.gserviceaccount.com --key-file=/var/lib/jenkins/secrets.json --project=strong-host-322803'
+            }
+        }
+        stage('Conexion GKS') {
+            steps {
+                sh '/var/lib/jenkins/google-cloud-sdk/bin/gcloud container clusters get-credentials gke-test-1 --region us-central1'
+            }
+        }
+        stage('Ejecucion del despliegue odoo en Google cloud') {
+            steps {
+                sh 'kubectl apply -f odoo.yml'
+            }
+        }
+    }
+}
+
+
