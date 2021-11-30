@@ -3,7 +3,7 @@ pipeline {
     stages {
          stage('Set Auth service account') {
             steps {
-                sh '/var/lib/jenkins/google-cloud-sdk/bin/gcloud auth activate-service-account 402461435375-compute@developer.gserviceaccount.com --key-file=/var/lib/jenkins/secrets.json --project=strong-host-322803'
+                sh '/var/lib/jenkins/google-cloud-sdk/bin/gcloud auth activate-service-account 593492995065-compute@developer.gserviceaccount.com --key-file=/var/lib/jenkins/secretsgoogle.json --project=strong-host-322803'
             }
         }
         stage('Conexion GKS') {
